@@ -1,0 +1,2 @@
+# merge_channel_data.py가 LF로 쓰는 파일들이 체크아웃 후에도 바이트 단위로 같도록 LF 고정
+* text=auto eol=lf

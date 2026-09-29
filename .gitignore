@@ -1,0 +1,6 @@
+# 로컬 도구 설정 (Claude Code 권한·미리보기 서버)
+.claude/
+
+__pycache__/
+Thumbs.db
+desktop.ini

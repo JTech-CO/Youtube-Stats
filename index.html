@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>채널 성장 기록</title>
+  <meta name="description" content="2017년 11월 개설 이후 채널의 구독자, 유효 조회수, 조회수, 시청 시간, 평균 시청 지속 시간 변화를 시간 순서대로 재생하는 그래프">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <h1>채널 성장 기록</h1>
+        <p>2017.11.26 개설부터 일별 기록으로 재생</p>
+      </div>
+      <div class="clock">
+        <div class="clock-date" id="clockDate">2017.11.26</div>
+        <div class="clock-sub"><span id="clockWeekday">일요일</span> · <span id="clockDays">개설 1일째</span></div>
+      </div>
+    </header>
+
+    <main class="stage" id="stage" aria-label="그래프 5개. 그래프를 누르면 크게 봅니다.">
+      <div class="tooltip" id="tooltip" role="status" hidden></div>
+    </main>
+
+    <div class="controls" role="group" aria-label="재생 제어">
+      <div class="transport">
+        <button class="btn btn-icon" id="playBtn" type="button" aria-label="재생">
+          <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>
+          <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+        </button>
+        <button class="btn btn-icon" id="restartBtn" type="button" aria-label="처음부터 재생">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM19 5.5v13L9.5 12z"/></svg>
+        </button>
+      </div>
+      <div class="scrub">
+        <input type="range" id="scrubber" min="0" max="0" step="1" value="0" aria-label="날짜 이동">
+        <div class="scrub-scale" id="scrubScale" aria-hidden="true"></div>
+      </div>
+      <div class="options">
+        <div class="option">
+          <span class="option-label" id="intervalLabel">간격</span>
+          <div class="seg" role="radiogroup" aria-labelledby="intervalLabel" data-setting="interval">
+            <button type="button" role="radio" data-value="day">일</button>
+            <button type="button" role="radio" data-value="week">주</button>
+            <button type="button" role="radio" data-value="month">월</button>
+          </div>
+        </div>
+        <div class="option">
+          <span class="option-label" id="rangeLabel">범위</span>
+          <div class="seg" role="radiogroup" aria-labelledby="rangeLabel" data-setting="range">
+            <button type="button" role="radio" data-value="all" title="개설일부터 지금까지">전체</button>
+            <button type="button" role="radio" data-value="recent" title="일 간격 90일, 주 간격 52주, 월 간격 36개월">최근</button>
+          </div>
+        </div>
+        <div class="option">
+          <span class="option-label" id="speedLabel">속도</span>
+          <div class="seg" role="radiogroup" aria-labelledby="speedLabel" data-setting="speed">
+            <button type="button" role="radio" data-value="15" title="초당 15일">×0.5</button>
+            <button type="button" role="radio" data-value="30" title="초당 30일">×1</button>
+            <button type="button" role="radio" data-value="60" title="초당 60일">×2</button>
+            <button type="button" role="radio" data-value="120" title="초당 120일">×4</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="footnote">
+      진행 중인 주·월은 그날까지의 누계이며, 변화율은 직전 기간의 같은 경과 일수와 비교합니다. 기간 마지막 날에는 직전 기간 전체와 비교합니다.
+      구독자 캔들의 시가는 직전 기간 종가이고, 채운 몸통은 상승, 빈 몸통은 하락입니다.
+      표로 보기: <a href="채널데이터_전체기간_병합.csv">일별</a> · <a href="채널데이터_주간집계.csv">주간</a> · <a href="채널데이터_월간집계.csv">월간</a> CSV
+      <span class="shortcuts">· 단축키: Space 재생/정지, ←/→ 하루 이동(Shift 7일), 1~5 그래프 크게 보기, Esc 전체 보기</span>
+    </p>
+  </div>
+
+  <template id="panelTemplate">
+    <section class="panel" tabindex="0" role="button" aria-pressed="false">
+      <div class="panel-head">
+        <div class="panel-title">
+          <span class="panel-key" aria-hidden="true"></span>
+          <h2 data-ref="title"></h2>
+          <span class="panel-sub" data-ref="sub"></span>
+          <span class="panel-aside">
+            <span class="candle-key" data-ref="legend" hidden><i class="key-up"></i>상승<i class="key-down"></i>하락</span>
+            <span class="panel-hint" aria-hidden="true">눌러서 전체 보기</span>
+          </span>
+        </div>
+        <div class="panel-figures">
+          <span class="panel-value"><span data-ref="value"></span><span class="panel-unit" data-ref="unit"></span></span>
+          <span class="delta" data-ref="delta">
+            <span data-ref="rate"></span>
+            <span class="delta-change" data-ref="change"></span>
+            <span class="delta-basis" data-ref="basis"></span>
+          </span>
+        </div>
+      </div>
+      <div class="plot"><canvas aria-hidden="true"></canvas></div>
+    </section>
+  </template>
+
+  <script src="js/channel-data.js"></script>
+  <script src="js/model.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
