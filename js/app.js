@@ -30,7 +30,8 @@
   const PERIOD = { day: "일간", week: "주간", month: "월간" };
   const CANDLE = { day: "일봉", week: "주봉", month: "월봉" };
   const PREVIOUS = { day: "전일", week: "전주", month: "전월" };
-  const WINDOW = { day: 90, week: 52, month: 36 }; // '최근' 범위와 '전체' 범위 초반의 최소 폭(기간 수)
+  // 화면에 보이는 폭(기간 수): 어느 간격이든 약 1년. '전체' 범위에서는 첫 1년 동안의 최소 폭.
+  const WINDOW = { day: 365, week: 52, month: 12 };
 
   // text: 모델 값(시청 시간은 x10000 정수) → 표시 문자열, tagText: 그래프 값(시청 시간은 시간) → 축 태그
   const SPECS = [
@@ -57,7 +58,7 @@
     dragging: false,
     speed: 30, // 초당 일수
     interval: "week",
-    range: "all",
+    range: "year", // year: 최근 1년 창이 재생 위치를 따라 이동, all: 개설일부터 전체
     focus: null,
     hover: null,
   };
@@ -457,11 +458,11 @@
   });
 
   // ---------- 시작 ----------
-  // 주소의 #date=2025-07-04&interval=day&range=recent&focus=views 로 특정 장면을 바로 연다(이때는 자동 재생 안 함)
+  // 주소의 #date=2025-07-04&interval=day&range=all&focus=views 로 특정 장면을 바로 연다(이때는 자동 재생 안 함)
   const params = new URLSearchParams(location.hash.slice(1));
   const pick = (name, allowed) => (allowed.includes(params.get(name)) ? params.get(name) : null);
   state.interval = pick("interval", Object.keys(PERIOD)) || state.interval;
-  state.range = pick("range", ["all", "recent"]) || state.range;
+  state.range = pick("range", ["year", "all"]) || state.range;
   const date = /^(\d{4})-(\d{2})-(\d{2})$/.exec(params.get("date") || "");
   if (date) seek(model.indexOf(Number(date[1]), Number(date[2]), Number(date[3])));
   state.focus = pick("focus", SPECS.map((s) => s.id));
