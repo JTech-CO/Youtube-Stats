@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>채널 성장 기록 2017—2026 · Motion Graphic</title>
+  <meta name="description" content="25초, 120 BPM 데이터 모션그래픽. 유튜브 채널의 2017-11-26 개설부터 2026-09-27까지 구독자·조회수·시청 시간 기록 기반.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/stage.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/scenes.css">
+  <link rel="stylesheet" href="css/controls.css">
+</head>
+<body>
+  <main id="viewport" aria-label="채널 성장 기록 2017—2026 모션그래픽">
+    <div id="stage">
+      <canvas id="field" width="1920" height="1080"></canvas>
+      <div id="scenes"></div>
+      <div id="transition-layer"></div>
+      <div id="grain"></div>
+      <div id="hud"></div>
+      <div id="beatgrid" hidden></div>
+    </div>
+  </main>
+
+  <div id="controls" role="toolbar" aria-label="Player controls"></div>
+
+  <script defer src="js/core/util.js"></script>
+  <script defer src="js/core/timeline.js"></script>
+  <script defer src="js/data.js"></script>
+  <script defer src="js/ui/components.js"></script>
+  <script defer src="js/fx/textures.js"></script>
+  <script defer src="js/hud.js"></script>
+  <script defer src="js/scenes/01-hook.js"></script>
+  <script defer src="js/scenes/02-seed.js"></script>
+  <script defer src="js/scenes/03-flatline.js"></script>
+  <script defer src="js/scenes/04-burst.js"></script>
+  <script defer src="js/scenes/05-watch.js"></script>
+  <script defer src="js/scenes/06-stack.js"></script>
+  <script defer src="js/scenes/07-spike.js"></script>
+  <script defer src="js/scenes/08-candles.js"></script>
+  <script defer src="js/scenes/09-race.js"></script>
+  <script defer src="js/scenes/10-best.js"></script>
+  <script defer src="js/scenes/11-montage.js"></script>
+  <script defer src="js/scenes/12-endcard.js"></script>
+  <script defer src="js/transitions.js"></script>
+  <script defer src="js/engine.js"></script>
+  <script defer src="js/audio.js"></script>
+  <script defer src="js/controls.js"></script>
+  <script defer src="js/main.js"></script>
+</body>
+</html>
